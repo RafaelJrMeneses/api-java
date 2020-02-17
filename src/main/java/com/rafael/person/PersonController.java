@@ -49,7 +49,7 @@ public class PersonController {
         return new ResponseEntity<Person>(newPerson, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
+    @PostMapping("/deletePerson/{id}")
     public ResponseEntity<String> delete(@Valid @PathVariable Integer id) {
 
         service.delete(id);

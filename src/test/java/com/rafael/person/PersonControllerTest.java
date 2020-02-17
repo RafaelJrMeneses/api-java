@@ -113,6 +113,26 @@ public class PersonControllerTest {
         assertEquals("404 NOT_FOUND", person.getBody().get("error"));
     }
 
+    @Test
+    void shouldReturnHttpStatus200WhenInformedOfAValidIdForExclusion() {
+
+        ResponseEntity<String> person = testRestTemplate.postForEntity(HTTP_LOCALHOST + port + URI + "/deletePerson/35", Person.class, String.class);
+
+        assertEquals(HttpStatus.OK.value(), person.getStatusCode().value());
+        assertEquals("Person successfully deleted", person.getBody());
+
+    }
+
+    @Test
+    void ShouldReturnHttpStatus404WhenInformedOfInvalidIdForExclusion() {
+
+        ResponseEntity<Map> person = testRestTemplate.postForEntity(HTTP_LOCALHOST + port + URI + "/deletePerson/0", Person.class, Map.class);
+
+        assertEquals(HttpStatus.NOT_FOUND.value(), person.getStatusCode().value());
+        assertEquals("This person doesn't exist" , person.getBody().get("message"));
+        assertEquals("404 NOT_FOUND", person.getBody().get("error"));
+    }
+
     private Person getPerson(Integer integer, String name, String age, String gender) {
         return new Person(integer, name, age, gender);
     }
