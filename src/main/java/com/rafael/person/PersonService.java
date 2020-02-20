@@ -2,6 +2,7 @@ package com.rafael.person;
 
 import com.rafael.exception.PersonAlreadyExistsException;
 import com.rafael.exception.PersonNotFoundException;
+import com.rafael.phone.Phone;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
@@ -38,6 +39,11 @@ public class PersonService {
         if (idPerson.isPresent()) {
             throw new PersonAlreadyExistsException();
         }
+
+        List<Phone> phone = person.getPhones();
+        for (Phone phones: phone){
+            phones.setPerson(person);
+        }
         var newPerson = repository.save(person);
 
         return newPerson;
@@ -48,6 +54,11 @@ public class PersonService {
 
         if (!repository.existsById(person.getId())){
             throw new PersonNotFoundException();
+        }
+
+        List<Phone> phone = person.getPhones();
+        for (Phone phones: phone){
+            phones.setPerson(person);
         }
 
         var newPerson = repository.save(person);

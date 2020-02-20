@@ -2,11 +2,15 @@ package com.rafael.person;
 
 import com.rafael.exception.PersonAlreadyExistsException;
 import com.rafael.exception.PersonNotFoundException;
+import com.rafael.phone.Phone;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.rafael.utils.GenerateIdUtilsTest.generateUniqueId;
 import static org.junit.jupiter.api.Assertions.*;
@@ -22,6 +26,7 @@ public class PersonServiceTest {
 
     @Mock
     private Person person;
+    private List<Phone> phones;
 
     @Test
     void shouldReturnAPersonWhenAValidIdIsInformed() {
@@ -99,9 +104,16 @@ public class PersonServiceTest {
 
     }
 
-
     private Person createPerson() {
-        return new Person(person.getId(),"Rafa", "22", "M");
+        return new Person(person.getId(),"Rafa", "22", "M", createPhone());
     }
 
+    private List<Phone> createPhone() {
+        var newphones = new Phone(1, "14252", new Person());
+
+        List<Phone> phones = new ArrayList<>();
+        phones.add(newphones);
+
+        return phones;
+    }
 }

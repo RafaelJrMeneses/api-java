@@ -1,6 +1,7 @@
 package com.rafael.person;
 
 import com.rafael.exception.PersonNotFoundException;
+import com.rafael.phone.Phone;
 import org.junit.Rule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,6 +14,8 @@ import io.restassured.RestAssured;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import static com.rafael.utils.GenerateIdUtilsTest.generateUniqueId;
@@ -63,7 +66,7 @@ public class PersonControllerTest {
     @Test
     void deveriaRetornarHttpStatus201QuandoForInseridoUmaPessoaComSucesso() {
 
-        Person newPerson = getPerson(generateUniqueId(), "Mariazinha1", "44", "F");
+        Person newPerson = getPerson(generateUniqueId(), "Mariazinha1", "44", "F", createPhone());
 
         ResponseEntity<Map> person = testRestTemplate.postForEntity(HTTP_LOCALHOST + port + URI, newPerson, Map.class);
 
@@ -77,7 +80,7 @@ public class PersonControllerTest {
     @Test
     void shouldReturnHttpStatus500WhenAnExistingPersonIsAdded() {
 
-        Person newPerson = getPerson(7, "Mariazinha", "null", "null");
+        Person newPerson = getPerson(7, "Mariazinha", "null", "null", null);
 
         ResponseEntity<Map> person = testRestTemplate.postForEntity(HTTP_LOCALHOST + port + URI, newPerson, Map.class);
 
@@ -89,7 +92,7 @@ public class PersonControllerTest {
     @Test
     void shouldReturnHttpStatus200WhenAPersonIsSuccessfullyEdited() {
 
-        Person newPerson = getPerson(7, "Mariazinha", "44", "F");
+        Person newPerson = getPerson(7, "Mariazinha", "44", "F", createPhone());
 
         ResponseEntity<Map> person = testRestTemplate.postForEntity(HTTP_LOCALHOST + port + URI_UPDATE, newPerson, Map.class);
 
@@ -104,7 +107,7 @@ public class PersonControllerTest {
     @Test
     void shouldReturnHttpStatus404WhenInvalidIdIsReportedInEdition() {
 
-        Person newPerson = getPerson(0, "Mariazinha", "44", "F");
+        Person newPerson = getPerson(0, "Mariazinha", "44", "F", null);
 
         ResponseEntity<Map> person = testRestTemplate.postForEntity(HTTP_LOCALHOST + port + URI_UPDATE, newPerson, Map.class);
 
@@ -116,7 +119,7 @@ public class PersonControllerTest {
     @Test
     void shouldReturnHttpStatus200WhenInformedOfAValidIdForExclusion() {
 
-        ResponseEntity<String> person = testRestTemplate.postForEntity(HTTP_LOCALHOST + port + URI + "/deletePerson/35", Person.class, String.class);
+        ResponseEntity<String> person = testRestTemplate.postForEntity(HTTP_LOCALHOST + port + URI + "/deletePerson/37", Person.class, String.class);
 
         assertEquals(HttpStatus.OK.value(), person.getStatusCode().value());
         assertEquals("Person successfully deleted", person.getBody());
@@ -133,8 +136,17 @@ public class PersonControllerTest {
         assertEquals("404 NOT_FOUND", person.getBody().get("error"));
     }
 
-    private Person getPerson(Integer integer, String name, String age, String gender) {
-        return new Person(integer, name, age, gender);
+    private Person getPerson(Integer integer, String name, String age, String gender, List<Phone> phones) {
+        return new Person(integer, name, age, gender, phones);
+    }
+
+    private List<Phone> createPhone() {
+        var newPhones = new Phone(1, "14252", new Person());
+
+        List<Phone> phones = new ArrayList<>();
+        phones.add(newPhones);
+
+        return phones;
     }
 
 }

@@ -1,13 +1,13 @@
 package com.rafael.person;
 
 
+import com.rafael.phone.Phone;
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -29,5 +29,8 @@ public class Person {
 
     @NotBlank(message = "gender is required")
     private String gender;
+
+    @OneToMany(mappedBy = "person", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Phone> phones;
 
 }
