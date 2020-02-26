@@ -21,7 +21,7 @@ public class PersonController {
 
 
     @GetMapping("/all")
-    @ApiOperation("Find all person by Id")
+    @ApiOperation("List all people")
     public ResponseEntity<List<Person>> get() {
 
         return new ResponseEntity<>(service.getAll(), HttpStatus.OK);
