@@ -1,5 +1,6 @@
 package com.rafael.person;
 
+import com.rafael.bank_account.BankAccount;
 import com.rafael.exception.PersonAlreadyExistsException;
 import com.rafael.exception.PersonNotFoundException;
 import com.rafael.phone.Phone;
@@ -40,10 +41,9 @@ public class PersonService {
             throw new PersonAlreadyExistsException();
         }
 
-        List<Phone> phone = person.getPhones();
-        for (Phone phones: phone){
-            phones.setPerson(person);
-        }
+        setPhone(person);
+        setBankAccount(person);
+
         var newPerson = repository.save(person);
 
         return newPerson;
@@ -56,10 +56,8 @@ public class PersonService {
             throw new PersonNotFoundException();
         }
 
-        List<Phone> phone = person.getPhones();
-        for (Phone phones: phone){
-            phones.setPerson(person);
-        }
+        setPhone(person);
+        setBankAccount(person);
 
         var newPerson = repository.save(person);
 
@@ -72,5 +70,21 @@ public class PersonService {
             throw new PersonNotFoundException();
         }
         repository.deleteById(id);
+    }
+
+    private void setPhone(Person person) {
+
+        List<Phone> phone = person.getPhones();
+        for (Phone phones: phone){
+            phones.setPerson(person);
+        }
+    }
+
+    private void setBankAccount(Person person) {
+
+        List<BankAccount> bankAccount = person.getBankAccounts();
+        for(BankAccount bankAccounts : bankAccount){
+            bankAccounts.setPerson(person);
+        }
     }
 }

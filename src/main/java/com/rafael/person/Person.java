@@ -1,6 +1,7 @@
 package com.rafael.person;
 
 
+import com.rafael.bank_account.BankAccount;
 import com.rafael.phone.Phone;
 import lombok.*;
 
@@ -32,5 +33,8 @@ public class Person {
 
     @OneToMany(mappedBy = "person", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Phone> phones;
+
+    @OneToMany(mappedBy = "person", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<BankAccount> bankAccounts;
 
 }

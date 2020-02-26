@@ -1,5 +1,6 @@
 package com.rafael.person;
 
+import com.rafael.bank_account.BankAccount;
 import com.rafael.exception.PersonAlreadyExistsException;
 import com.rafael.exception.PersonNotFoundException;
 import com.rafael.phone.Phone;
@@ -105,7 +106,7 @@ public class PersonServiceTest {
     }
 
     private Person createPerson() {
-        return new Person(person.getId(),"Rafa", "22", "M", createPhone());
+        return new Person(person.getId(),"Rafa", "22", "M", createPhone(), createBankAccount());
     }
 
     private List<Phone> createPhone() {
@@ -115,5 +116,14 @@ public class PersonServiceTest {
         phones.add(newphones);
 
         return phones;
+    }
+
+    private List<BankAccount> createBankAccount() {
+        var newphones = new BankAccount(1, "NuBank", "1252", "0001", new Person());
+
+        List<BankAccount> bankAccounts = new ArrayList<>();
+        bankAccounts.add(newphones);
+
+        return bankAccounts;
     }
 }
