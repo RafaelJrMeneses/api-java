@@ -45,15 +45,16 @@ public class PersonController {
         return new ResponseEntity<Person>(save, HttpStatus.CREATED);
     }
 
-    @PostMapping("/updatePerson")
-    public ResponseEntity<Person> update(@Valid @RequestBody Person person, @ApiIgnore Errors err) {
+    @PostMapping("/update")
+    @ApiOperation("Update person")
+    public ResponseEntity<Person> update(@Valid @RequestBody Person person) {
 
         var newPerson = service.update(person);
 
         return new ResponseEntity<Person>(newPerson, HttpStatus.OK);
     }
 
-    @PostMapping("/deletePerson/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> delete(@Valid @PathVariable Integer id) {
 
         service.delete(id);

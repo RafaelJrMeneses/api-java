@@ -1,0 +1,281 @@
+---
+swagger: "2.0"
+info:
+  description: "This documentation is for study purposes \n"
+  version: 1.0.0
+  title: Swagger Rafael
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: apiteam@swagger.io
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+host: virtserver.swaggerhub.com
+basePath: /RafaelJrMeneses/api_rafael/1.0.0
+tags:
+- name: person
+  description: All about people
+  externalDocs:
+    description: Find out more
+    url: http://swagger.io
+schemes:
+- https
+- http
+paths:
+  /api/v1/people:
+    post:
+      tags:
+      - person
+      summary: Create person
+      description: Any user can save a new person
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      parameters:
+      - in: body
+        name: body
+        description: Create person object
+        required: true
+        schema:
+          $ref: '#/definitions/Person'
+      responses:
+        "201":
+          description: Successful operation
+        "400":
+          description: The 'getField' field is incorrect
+        "405":
+          description: Invalid input
+        "500":
+          description: This person already exists!
+      security:
+      - person_auth:
+        - write:person
+        - read:person
+  /api/v1/people/all:
+    get:
+      tags:
+      - person
+      summary: List all people
+      produces:
+      - application/json
+      - application/xml
+      parameters:
+      - name: status
+        in: query
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+      responses:
+        "200":
+          description: Successful opreation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Person'
+      security:
+      - person_auth:
+        - write:person
+        - read:person
+  /api/v1/people/{id}:
+    get:
+      tags:
+      - person
+      summary: Find one person by Id
+      description: Returns a single person
+      operationId: getPersonById
+      produces:
+      - application/json
+      - application/xml
+      parameters:
+      - name: id
+        in: path
+        description: Id of person to return
+        required: true
+        type: integer
+        format: int64
+      responses:
+        "200":
+          description: Sucessful operation
+          schema:
+            $ref: '#/definitions/Person'
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: Person not found
+      security:
+      - api_key: []
+  /api/v1/people/update:
+    post:
+      tags:
+      - person
+      summary: Update person
+      description: Any user can update a person existent
+      operationId: updatePerson
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      parameters:
+      - in: body
+        name: body
+        description: Update person object
+        required: true
+        schema:
+          $ref: '#/definitions/Person'
+      responses:
+        "200":
+          description: Successful opreation
+        "404":
+          description: This person doesn't exist
+      security:
+      - person_auth:
+        - write:person
+        - read:person
+  /api/v1/people/delete/{id}:
+    post:
+      tags:
+      - person
+      summary: Delete person
+      operationId: deletePerson
+      produces:
+      - application/json
+      - application/xml
+      parameters:
+      - name: id
+        in: path
+        description: Id of person to delete
+        required: true
+        type: integer
+        format: int64
+      responses:
+        "200":
+          description: Successful opreation
+        "404":
+          description: This person doesn't exist
+      security:
+      - person_auth:
+        - write:person
+        - read:person
+  /api/v1/phones/all:
+    get:
+      tags:
+      - phone
+      summary: List all phone
+      produces:
+      - application/json
+      - application/xml
+      parameters:
+      - name: status
+        in: query
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+      responses:
+        "200":
+          description: Successful opreation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Phone'
+      security:
+      - person_auth:
+        - write:person
+        - read:person
+  /api/v1/bankAccounts/all:
+    get:
+      tags:
+      - bankAccounts
+      summary: List all Bank Accounts
+      produces:
+      - application/json
+      - application/xml
+      parameters:
+      - name: status
+        in: query
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+      responses:
+        "200":
+          description: Successful opreation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/BankAccount'
+      security:
+      - person_auth:
+        - write:person
+        - read:person
+securityDefinitions:
+  person_auth:
+    type: oauth2
+    authorizationUrl: http://petstore.swagger.io/oauth/dialog
+    flow: implicit
+    scopes:
+      write:person: modify person in your account
+      read:person: read your person
+  api_key:
+    type: apiKey
+    name: api_key
+    in: header
+definitions:
+  Person:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      name:
+        type: string
+      age:
+        type: string
+      gender:
+        type: string
+      phones:
+        type: array
+        items:
+          $ref: '#/definitions/Phone'
+      bankAccounts:
+        type: array
+        items:
+          $ref: '#/definitions/BankAccount'
+    xml:
+      name: Person
+  Phone:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      number:
+        type: string
+    xml:
+      name: Phone
+  BankAccount:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      account:
+        type: string
+      agency:
+        type: string
+      bankName:
+        type: string
+    xml:
+      name: BankAccount
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
